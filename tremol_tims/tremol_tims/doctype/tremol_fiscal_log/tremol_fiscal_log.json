@@ -1,0 +1,22 @@
+{
+ "doctype": "DocType",
+ "name": "Tremol Fiscal Log",
+ "module": "Tremol Tims",
+ "autoname": "format:TFL-{#####}",
+ "fields": [
+  {"fieldname": "sales_invoice", "fieldtype": "Link", "label": "Sales Invoice",
+   "options": "Sales Invoice", "reqd": 1, "unique": 1},
+  {"fieldname": "environment", "fieldtype": "Select", "options": "Dev\nProd", "label": "Environment"},
+  {"fieldname": "status", "fieldtype": "Select", "label": "Status",
+   "options": "Pending\nSuccess\nFailed", "default": "Pending"},
+  {"fieldname": "cb1", "fieldtype": "Column Break"},
+  {"fieldname": "cu_invoice_number", "fieldtype": "Data", "label": "CU Invoice Number"},
+  {"fieldname": "qr_code", "fieldtype": "Small Text", "label": "QR Code Data"},
+  {"fieldname": "sb1", "fieldtype": "Section Break", "label": "Detail"},
+  {"fieldname": "error_message", "fieldtype": "Small Text", "label": "Error Message"},
+  {"fieldname": "raw_response", "fieldtype": "Code", "label": "Raw Response", "options": "XML"}
+ ],
+ "permissions": [
+  {"role": "System Manager", "read": 1, "write": 1, "create": 1}
+ ]
+}

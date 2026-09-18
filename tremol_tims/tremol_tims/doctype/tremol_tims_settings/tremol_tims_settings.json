@@ -1,0 +1,142 @@
+{
+ "actions": [],
+ "creation": "2026-09-17 10:27:48.110143",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "environment",
+  "sb_dev",
+  "dev_ip",
+  "cb_dev",
+  "dev_port",
+  "sb_prod",
+  "prod_ip",
+  "cb_prod",
+  "prod_port",
+  "sb_conn",
+  "password",
+  "cb_conn",
+  "zfplabserver_url",
+  "request_timeout",
+  "sb_status",
+  "last_checked",
+  "last_status"
+ ],
+ "fields": [
+  {
+   "default": "Dev",
+   "fieldname": "environment",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Active Environment",
+   "options": "Dev\nProd",
+   "reqd": 1
+  },
+  {
+   "fieldname": "sb_dev",
+   "fieldtype": "Section Break",
+   "label": "Dev Device"
+  },
+  {
+   "fieldname": "dev_ip",
+   "fieldtype": "Data",
+   "label": "Dev IP"
+  },
+  {
+   "fieldname": "cb_dev",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "8000",
+   "fieldname": "dev_port",
+   "fieldtype": "Int",
+   "label": "Dev Port"
+  },
+  {
+   "fieldname": "sb_prod",
+   "fieldtype": "Section Break",
+   "label": "Prod Device"
+  },
+  {
+   "fieldname": "prod_ip",
+   "fieldtype": "Data",
+   "label": "Prod IP"
+  },
+  {
+   "fieldname": "cb_prod",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "8000",
+   "fieldname": "prod_port",
+   "fieldtype": "Int",
+   "label": "Prod Port"
+  },
+  {
+   "fieldname": "sb_conn",
+   "fieldtype": "Section Break",
+   "label": "Connection"
+  },
+  {
+   "fieldname": "password",
+   "fieldtype": "Password",
+   "in_list_view": 1,
+   "label": "Device Password",
+   "reqd": 1
+  },
+  {
+   "fieldname": "cb_conn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "http://localhost:4444",
+   "fieldname": "zfplabserver_url",
+   "fieldtype": "Data",
+   "label": "ZFPLabServer URL"
+  },
+  {
+   "default": "15",
+   "fieldname": "request_timeout",
+   "fieldtype": "Int",
+   "label": "Request Timeout (s)"
+  },
+  {
+   "fieldname": "sb_status",
+   "fieldtype": "Section Break",
+   "label": "Last Known Status"
+  },
+  {
+   "fieldname": "last_checked",
+   "fieldtype": "Datetime",
+   "label": "Last Checked",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_status",
+   "fieldtype": "Small Text",
+   "label": "Last ReadStatus Result",
+   "read_only": 1
+  }
+ ],
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-09-17 10:41:08.718735",
+ "modified_by": "Administrator",
+ "module": "Tremol Tims",
+ "name": "Tremol TIMS Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "read": 1,
+   "role": "System Manager",
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "track_seen": 1
+}
