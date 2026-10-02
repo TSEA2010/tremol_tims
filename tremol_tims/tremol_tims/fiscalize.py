@@ -58,6 +58,12 @@ def on_submit_sales_invoice(doc, method=None):
 		log.status = "Failed"
 		log.error_message = str(e)
 		frappe.log_error(title="Tremol TIMS fiscalization failed", message=str(e))
+	else:
+		doc.db_set("is_filed", 1, update_modified=False)
+		doc.db_set("etr_invoice_number", log.cu_invoice_number, update_modified=False)
+		doc.db_set("cu_link", log.qr_code.strip(), update_modified=False)
+		doc.db_set("cu_invoice_date", frappe.utils.nowdate(), update_modified=False)
+		_attach_qr_image(doc, log.qr_code.strip(), fieldname="etr_qr_image")
 	finally:
 		log.raw_response = "\n\n".join(trace)
 		log.save(ignore_permissions=True)
@@ -79,9 +85,8 @@ def _fiscalize_invoice(client, doc, trace):
 	try:
 		open_resp = call(
 			"OpenInvoiceWithFreeCustomerData("
-			f"OperNum=1,OperPass=,OptionInvoicePrintType=1,"
 			f"CompanyName={_clean(doc.customer_name)[:36]},ClientPINnum=,"
-			f"HeadQuarters=,Address=,PostalCodeAndCity=,ExemptionNum=)"
+			f"HeadQuarters=,Address=,PostalCodeAndCity=,ExemptionNum=,TraderSystemInvNum=)"
 		)
 		opened = True
 
@@ -90,9 +95,10 @@ def _fiscalize_invoice(client, doc, trace):
 			vat_class = get_vat_class(item.item_tax_template, rate)
 			call(
 				"SellPLUfromExtDB("
-				f"NamePLU={_clean(item.item_name)[:36]},OptionVATClass1={vat_class},"
+				f"NamePLU={_clean(item.item_name)[:36]},OptionVATClass={vat_class},"
 				f"Price={flt(item.rate):.2f},MeasureUnit={(item.uom or 'pcs')[:3]},"
-				f"HSCode=,HSName=,Quantity={flt(item.qty)},DiscAddP=,DiscAddV=)"
+				f"HSCode=,HSName=,VATGrRate={rate:.2f},"
+				f"Quantity={flt(item.qty)},DiscAddP=)"
 			)
 
 		call("ReadVATrates()")
@@ -128,3 +134,24 @@ def _xml(element):
 def _extract(root, name):
 	el = root.find(f".//Res[@Name='{name}']")
 	return el.attrib.get("Value") if el is not None else None
+
+def _attach_qr_image(doc, url, fieldname):
+	import io
+	import qrcode
+
+	img = qrcode.make(url)
+	buf = io.BytesIO()
+	img.save(buf, format="PNG")
+
+	file_doc = frappe.get_doc({
+		"doctype": "File",
+		"file_name": f"{doc.name}_qr.png",
+		"attached_to_doctype": doc.doctype,
+		"attached_to_name": doc.name,
+		"attached_to_field": fieldname,
+		"content": buf.getvalue(),
+		"is_private": 0,
+	})
+	file_doc.insert(ignore_permissions=True)
+
+	doc.db_set(fieldname, file_doc.file_url, update_modified=False)
