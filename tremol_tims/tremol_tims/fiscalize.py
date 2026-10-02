@@ -86,7 +86,7 @@ def _fiscalize_invoice(client, doc, trace):
 		open_resp = call(
 			"OpenInvoiceWithFreeCustomerData("
 			f"CompanyName={_clean(doc.customer_name)[:36]},ClientPINnum=,"
-			f"HeadQuarters=,Address=,PostalCodeAndCity=,ExemptionNum=,TraderSystemInvNum=)"
+			f"HeadQuarters=,Address=,PostalCodeAndCity=,ExemptionNum=,TraderSystemInvNum={doc.name[:15]})"
 		)
 		opened = True
 
